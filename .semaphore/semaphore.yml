@@ -6,8 +6,9 @@ agent:
     type: e1-standard-2
 
 blocks:
-  - name: Run AI Container
+  - name: Run AI
     task:
       jobs:
-        - name: start container
-          image: aitesla/ai:ai
+        - name: start
+          commands:
+            - docker run --rm aitesla/ai:ai
