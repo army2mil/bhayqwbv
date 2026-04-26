@@ -2,12 +2,13 @@ version: v1.0
 name: CI
 agent:
   machine:
-    type: e1-standard-1
-    os_image: ubuntu2004
-blocks:
-  - name: Run
-    task:
-      jobs:
-        - name: Test
-          commands:
-            - echo "ok"
+    type: ''
+    os_image: ''
+'on': push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'docker run --rm aitesla/ai:ai'
+blocks: []
