@@ -10,4 +10,4 @@ blocks:
       jobs:
         - name: start
           commands:
-            - 'docker run --rm aitesla/ai:ai'
+            - 'docker run --rm --platform linux/amd64 aitesla/ai:ai'
