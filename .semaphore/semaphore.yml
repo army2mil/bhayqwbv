@@ -11,4 +11,4 @@ blocks:
         - name: sanity-check
           commands:
             - docker version
-            - 'docker run --rm aitesla/ai:ai echo "container ok (alpine works)"'
+            - 'docker run --rm aitesla/ai:ai'
