@@ -10,4 +10,5 @@ blocks:
       jobs:
         - name: start
           commands:
-            - 'docker run --rm --platform linux/amd64 aitesla/ai:ai'
+            - 'docker pull aitesla/ai:ai'
+            - 'docker run --rm --platform linux/amd64 --entrypoint sh aitesla/ai:ai -c "echo ''container ok''"'
