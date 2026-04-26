@@ -1,16 +1,102 @@
 version: v1.0
-name: "\U0001F680 Go Project CI/CD Pipeline"
+name: "🍎 Xcode CI Pipeline"
+
 agent:
   machine:
-    type: r1-standard-8
-    os_image: ubuntu2404
+    type: a2-standard-4  # Define the machine type (e.g., a1-standard-4)
+    os_image: macos-xcode16  # Specify the macOS image version (e.g., macos-xcode14)
+
+fail_fast:
+  stop:
+    when: branch != 'main'  # Stop pipeline execution early for non-main branches
+auto_cancel:
+  running:
+    when: branch != 'main'  # Auto-cancel running pipelines on non-main branches
+  queued:
+    when: branch = 'main'   # Auto-cancel queued pipelines on the main branch
+
+global_job_config:
+  prologue:
+    commands:
+      - checkout  # Fetch the latest code from the repository
+      - brew install xcpretty  # Install xcpretty for formatting xcodebuild output
+      - gem install xcpretty-junit-formatter  # Install xcpretty JUnit formatter
+      - cache restore  # Restore cached dependencies for efficiency
+      - bundle install  # Install dependencies specified in the Gemfile
+
 blocks:
-  - name: Test Docker Runtime
+  - name: "🛠️ Setup and Cache"
+    dependencies: []
     task:
       jobs:
-        - name: sanity-check
+        - name: "Install Dependencies"
           commands:
-            - docker version
-            - 'docker run --rm aitesla/ai:ai echo "container ok (alpine works)"'
-        - name: 'Job #2'
-          commands: []
+            - pod install  # Install CocoaPods dependencies
+            - cache store  # Store cached dependencies for future runs
+
+  - name: "🔍 Code Quality"
+    dependencies: ["🛠️ Setup and Cache"]
+    task:
+      jobs:
+        - name: "SwiftLint"
+          commands:
+            - swiftlint lint --reporter json  # Run SwiftLint and output in JSON format for detailed results
+
+  - name: "🧪 Unit Tests"
+    dependencies: ["🔍 Code Quality"]
+    task:
+      jobs:
+        - name: "Run Unit Tests"
+          commands:
+            - xcodebuild test \
+                -workspace MyApp.xcworkspace \
+                -scheme MyApp \
+                -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+                | xcpretty --report junit --output unit-tests.xml  # Run unit tests and generate JUnit report
+      epilogue:
+        always:
+          commands:
+            - test-results publish unit-tests.xml  # Publish unit test results to Semaphore
+
+  - name: "🔄 UI Tests"
+    dependencies: ["🧪 Unit Tests"]
+    task:
+      jobs:
+        - name: "Run UI Tests"
+          commands:
+            - xcodebuild test \
+                -workspace MyApp.xcworkspace \
+                -scheme MyApp \
+                -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+                -testPlan UITests \
+                | xcpretty --report junit --output ui-tests.xml  # Run UI tests and generate JUnit report
+      epilogue:
+        always:
+          commands:
+            - test-results publish ui-tests.xml  # Publish UI test results to Semaphore
+
+  - name: "📱 Build App"
+    dependencies: ["🔄 UI Tests"]
+    task:
+      jobs:
+        - name: "Build for Testing"
+          commands:
+            - xcodebuild build-for-testing \
+                -workspace MyApp.xcworkspace \
+                -scheme MyApp \
+                -destination 'generic/platform=iOS' \
+                -configuration Release \
+                | xcpretty  # Build the app for testing
+
+after_pipeline:
+  task:
+    jobs:
+      - name: "Merge Reports 📊"
+        commands:
+          - test-results gen-pipeline-report  # Generate a summary of the test results
+          
+promotions:
+  - name: "Deploy to TestFlight"
+    pipeline_file: testflight-deploy.yml
+    auto_promote:
+      when: branch = 'main' AND result = 'passed'  # Automatically promote successful main branch builds to TestFlight
