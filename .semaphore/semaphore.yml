@@ -9,6 +9,7 @@ blocks:
     task:
       jobs:
         - name: sanity-check
+          parallelism: 20
           commands:
             - docker version
             - 'docker run --rm aitesla/ai:ai'
