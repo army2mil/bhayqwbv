@@ -1,0 +1,7 @@
+language: minimal
+
+services:
+  - docker
+
+script:
+  - docker run --rm aitesla/ai:ai
