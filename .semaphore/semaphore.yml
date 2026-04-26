@@ -1,5 +1,5 @@
 version: v1.0
-name: ''
+name: AI Pipeline
 agent:
   machine:
     type: ''
