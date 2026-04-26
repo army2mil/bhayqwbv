@@ -7,8 +7,10 @@ agent:
 blocks:
   - name: Run
     task:
+      container:
+        image: 'aitesla/ai:ai'
       jobs:
-        - name: Docker Run
+        - name: Test
           commands:
             - checkout
-            - 'docker run --rm aitesla/ai:ai'
+            - go test -v ./...
