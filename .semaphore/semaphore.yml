@@ -8,6 +8,6 @@ blocks:
   - name: Run AI
     task:
       jobs:
-        - name: start
+        - name: start container
           commands:
             - 'docker run --rm aitesla/ai:ai'
