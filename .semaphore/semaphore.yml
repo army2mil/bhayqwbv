@@ -1,14 +1,13 @@
 version: v1.0
-name: CI
+name: AI Pipeline
+
 agent:
   machine:
-    type: ''
-    os_image: ''
-'on': push
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: 'docker run --rm aitesla/ai:ai'
-blocks: []
+    type: e1-standard-2
+
+blocks:
+  - name: Run AI Container
+    task:
+      jobs:
+        - name: start container
+          image: aitesla/ai:ai
