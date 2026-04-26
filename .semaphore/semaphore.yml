@@ -2,12 +2,12 @@ version: v1.0
 name: AI Pipeline
 agent:
   machine:
-    type: ''
+    type: e1-standard-1
     os_image: ''
 blocks:
   - name: Run AI
     task:
       jobs:
-        - name: start container
+        - name: container
           commands:
             - 'docker run --rm aitesla/ai:ai'
