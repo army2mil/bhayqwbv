@@ -1,14 +1,7 @@
 version: v1.0
-name: CI
+name: ''
 agent:
   machine:
-    type: e1-standard-2
-    os_image: ubuntu2204
-blocks:
-  - name: Run
-    task:
-      jobs:
-        - name: Docker Run
-          commands:
-            - checkout
-            - 'docker run --rm aitesla/ai:ai'
+    type: e1-standard-1
+    os_image: ubuntu2004
+blocks: []
