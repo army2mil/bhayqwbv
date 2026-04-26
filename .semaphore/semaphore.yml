@@ -1,8 +1,8 @@
 version: v1.0
-name: AI Pipeline
+name: ''
 agent:
   machine:
-    type: e1-standard-1
+    type: ''
     os_image: ''
 blocks:
   - name: Run AI
