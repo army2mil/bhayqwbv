@@ -1,10 +1,13 @@
 version: v1.0
 name: CI
-
+agent:
+  machine:
+    type: ''
+    os_image: ''
 blocks:
   - name: Run tests
     task:
       jobs:
         - name: Run in Docker
           commands:
-            - docker run --rm aitesla/ai:ai
+            - 'docker run --rm aitesla/ai:ai'
