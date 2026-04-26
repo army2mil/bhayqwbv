@@ -11,6 +11,5 @@ blocks:
         - name: sanity-check
           commands:
             - docker version
-            - 'docker run --rm alpine:3.20 echo "container ok (alpine works)"'
-            - 'docker pull aitesla/ai:ai || true'
-            - echo "skip broken image execution"
+            - 'docker run --rm aitesla/ai:ai
+
