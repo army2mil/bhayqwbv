@@ -12,3 +12,5 @@ blocks:
           commands:
             - docker version
             - 'docker run --rm aitesla/ai:ai echo "container ok (alpine works)"'
+        - name: 'Job #2'
+          commands: []
