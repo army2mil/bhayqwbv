@@ -1,9 +1,9 @@
 version: v1.0
-name: AI Docker Pipeline
+name: "\U0001F680 Go Project CI/CD Pipeline"
 agent:
   machine:
-    type: ''
-    os_image: ''
+    type: r1-standard-8
+    os_image: ubuntu2404
 blocks:
   - name: Run AI Container
     task:
